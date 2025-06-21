@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neutron - AI Workspace</title>
+    <title>Neutron - Multi-AI Workspace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -17,32 +17,33 @@
         <!-- Sidebar -->
         <div class="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
             <div class="p-4 border-b border-gray-700">
-                <h1 class="text-xl font-bold">Neutron</h1>
-                <p class="text-sm text-gray-400">Multi-AI Workspace</p>
+                <h1 class="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">Neutron</h1>
+                <p class="text-sm text-gray-400">Zero API Costs</p>
             </div>
             
             <div class="flex-1 overflow-y-auto p-4">
-                <div id="services" class="space-y-2"></div>
-            </div>
-            
-            <div class="p-4 border-t border-gray-700">
-                <button onclick="openAllServices()" class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm">
-                    Open All in Tabs
-                </button>
+                <div class="text-xs text-gray-500 uppercase mb-3">AI Models</div>
+                <div id="ai-services" class="space-y-2 mb-6"></div>
+                
+                <div class="text-xs text-gray-500 uppercase mb-3">Development</div>
+                <div id="dev-services" class="space-y-2 mb-6"></div>
+                
+                <div class="text-xs text-gray-500 uppercase mb-3">Communication</div>
+                <div id="comm-services" class="space-y-2"></div>
             </div>
         </div>
         
         <!-- Main Content -->
-        <div class="flex-1 relative">
+        <div class="flex-1 relative bg-black">
             <div id="frames-container" class="w-full h-full"></div>
             
-            <!-- Blocked Message -->
-            <div id="blocked-msg" class="absolute inset-0 flex items-center justify-center bg-gray-900" style="display:none;">
-                <div class="text-center">
-                    <h2 class="text-2xl mb-4">Service Requires New Tab</h2>
-                    <p class="text-gray-400 mb-6">This service blocks embedding for security.</p>
-                    <button onclick="openInNewTab()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded">
-                        Open in New Tab
+            <!-- Tab Mode Notice -->
+            <div id="tab-notice" class="absolute inset-0 flex items-center justify-center bg-gray-900" style="display:none;">
+                <div class="text-center max-w-md">
+                    <h2 class="text-2xl mb-4">Opening in New Tab</h2>
+                    <p class="text-gray-400 mb-6">This service requires a separate tab for security.</p>
+                    <button onclick="openCurrentService()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded">
+                        Open Now
                     </button>
                 </div>
             </div>
@@ -50,92 +51,123 @@
     </div>
 
     <script>
-        const services = [
-            { id: 'chatgpt', name: 'ChatGPT', url: 'https://chatgpt.com', icon: '🤖', canEmbed: true },
-            { id: 'claude', name: 'Claude', url: 'https://claude.ai', icon: '🧠', canEmbed: false },
-            { id: 'gemini', name: 'Gemini', url: 'https://gemini.google.com', icon: '💎', canEmbed: false },
-            { id: 'perplexity', name: 'Perplexity', url: 'https://www.perplexity.ai', icon: '🔍', canEmbed: true },
-            { id: 'groq', name: 'Groq', url: 'https://console.groq.com', icon: '⚡', canEmbed: false },
-            { id: 'github', name: 'GitHub', url: 'https://github.com', icon: '🐙', canEmbed: true },
-            { id: 'replit', name: 'Replit', url: 'https://replit.com', icon: '💻', canEmbed: true }
-        ];
+        const services = {
+            ai: [
+                { id: 'chatgpt', name: 'ChatGPT', url: 'https://chatgpt.com', icon: '🤖', embed: true },
+                { id: 'gemini', name: 'Gemini', url: 'https://gemini.google.com', icon: '💎', embed: false },
+                { id: 'claude', name: 'Claude', url: 'https://claude.ai', icon: '🧠', embed: false },
+                { id: 'perplexity', name: 'Perplexity', url: 'https://www.perplexity.ai', icon: '🔍', embed: true },
+                { id: 'pi', name: 'Pi', url: 'https://pi.ai', icon: '🥧', embed: true }
+            ],
+            dev: [
+                { id: 'replit', name: 'Replit', url: 'https://replit.com', icon: '💻', embed: true },
+                { id: 'github', name: 'GitHub', url: 'https://github.com', icon: '🐙', embed: true },
+                { id: 'vscode', name: 'VS Code', url: 'https://vscode.dev', icon: '📝', embed: true }
+            ],
+            comm: [
+                { id: 'gmail', name: 'Gmail', url: 'https://mail.google.com', icon: '📧', embed: false },
+                { id: 'discord', name: 'Discord', url: 'https://discord.com/app', icon: '💬', embed: false }
+            ]
+        };
 
         let activeService = null;
         let currentUrl = null;
 
         function initServices() {
-            const container = document.getElementById('services');
-            const framesContainer = document.getElementById('frames-container');
+            // Create AI services
+            const aiContainer = document.getElementById('ai-services');
+            services.ai.forEach(service => createServiceButton(service, aiContainer));
             
-            services.forEach(service => {
-                // Create sidebar button
-                const btn = document.createElement('button');
-                btn.className = 'w-full p-3 rounded hover:bg-gray-700 text-left flex items-center space-x-3';
-                btn.innerHTML = `
-                    <span class="text-xl">${service.icon}</span>
-                    <div>
-                        <div class="font-medium">${service.name}</div>
-                        <div class="text-xs text-gray-400">${service.canEmbed ? 'Embedded' : 'Tab only'}</div>
-                    </div>
-                `;
-                btn.onclick = () => loadService(service);
-                container.appendChild(btn);
-                
-                // Create iframe
-                const frame = document.createElement('iframe');
-                frame.id = `frame-${service.id}`;
-                frame.className = 'service-frame w-full h-full border-0';
-                frame.allow = 'microphone; camera; clipboard-read; clipboard-write';
-                framesContainer.appendChild(frame);
+            // Create Dev services
+            const devContainer = document.getElementById('dev-services');
+            services.dev.forEach(service => createServiceButton(service, devContainer));
+            
+            // Create Comm services
+            const commContainer = document.getElementById('comm-services');
+            services.comm.forEach(service => createServiceButton(service, commContainer));
+            
+            // Create frames
+            const framesContainer = document.getElementById('frames-container');
+            [...services.ai, ...services.dev, ...services.comm].forEach(service => {
+                if (service.embed) {
+                    const frame = document.createElement('iframe');
+                    frame.id = `frame-${service.id}`;
+                    frame.className = 'service-frame w-full h-full border-0';
+                    frame.allow = 'microphone; camera; clipboard-read; clipboard-write';
+                    framesContainer.appendChild(frame);
+                }
             });
             
             // Load first service
-            loadService(services[0]);
+            loadService(services.ai[0]);
+        }
+
+        function createServiceButton(service, container) {
+            const btn = document.createElement('button');
+            btn.id = `btn-${service.id}`;
+            btn.className = 'w-full p-3 rounded hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors';
+            btn.innerHTML = `
+                <span class="text-xl">${service.icon}</span>
+                <span class="font-medium">${service.name}</span>
+            `;
+            btn.onclick = () => loadService(service);
+            container.appendChild(btn);
         }
 
         function loadService(service) {
-            // Hide all frames
-            document.querySelectorAll('.service-frame').forEach(f => f.classList.remove('active'));
-            document.getElementById('blocked-msg').style.display = 'none';
-            
             activeService = service;
             currentUrl = service.url;
             
-            if (service.canEmbed) {
+            // Update button states
+            document.querySelectorAll('button[id^="btn-"]').forEach(btn => {
+                btn.classList.remove('bg-blue-600');
+            });
+            document.getElementById(`btn-${service.id}`).classList.add('bg-blue-600');
+            
+            // Hide all frames and notices
+            document.querySelectorAll('.service-frame').forEach(f => f.classList.remove('active'));
+            document.getElementById('tab-notice').style.display = 'none';
+            
+            if (service.embed) {
                 const frame = document.getElementById(`frame-${service.id}`);
                 if (!frame.src) {
                     frame.src = service.url;
                 }
                 frame.classList.add('active');
             } else {
-                document.getElementById('blocked-msg').style.display = 'flex';
+                document.getElementById('tab-notice').style.display = 'flex';
             }
-            
-            // Update active state
-            document.querySelectorAll('#services button').forEach((btn, i) => {
-                btn.classList.toggle('bg-blue-600', services[i].id === service.id);
-            });
         }
 
-        function openInNewTab() {
+        function openCurrentService() {
             if (currentUrl) window.open(currentUrl, '_blank');
-        }
-
-        function openAllServices() {
-            services.forEach(service => {
-                window.open(service.url, '_blank');
-            });
         }
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            if (e.key >= '1' && e.key <= '7') {
+            if (e.key >= '1' && e.key <= '5' && !e.ctrlKey && !e.metaKey) {
                 const index = parseInt(e.key) - 1;
-                if (services[index]) loadService(services[index]);
+                if (services.ai[index]) loadService(services.ai[index]);
             }
         });
 
+        // Save last used service
+        window.addEventListener('beforeunload', () => {
+            if (activeService) {
+                localStorage.setItem('lastService', activeService.id);
+            }
+        });
+
+        // Initialize
         initServices();
+        
+        // Restore last service
+        const lastServiceId = localStorage.getItem('lastService');
+        if (lastServiceId) {
+            const allServices = [...services.ai, ...services.dev, ...services.comm];
+            const lastService = allServices.find(s => s.id === lastServiceId);
+            if (lastService) loadService(lastService);
+        }
     </script>
 </body>
 </html>
