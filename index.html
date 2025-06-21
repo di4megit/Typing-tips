@@ -1,536 +1,141 @@
-``` ``` ```
-⚛️
-Neutron
-Multi-AI Workspace
-Embed View Tab View
-🤖
-ChatGPT
-OpenAI • Works in embed
-🧠
-Claude
-Anthropic • Opens in tab
-💎
-Gemini
-Google • Opens in tab
-🔍
-Perplexity
-Perplexity AI • May work
-⚡
-Groq
-Lightning Fast • Opens in tab
-🎭
-Poe
-Multiple Models • Opens in tab
-🤗
-Hugging Face
-Open Source • May work
-🎯
-You.com
-Search + AI • May work
-Developer Tools
-💻
-Replit
-Code Online • Works in embed
-🐙
-GitHub
-Code Repos • Works in embed
-⚙️
-VS Code
-Web Editor • Works in embed
-Neutron v2.0
-🚀 Enhanced
-ChatGPT
-
-Ready
-Embed View
-
-``````html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neutron - Multi-AI Workspace</title>
-    <meta name="description" content="Access all AI services and developer tools in one unified workspace">
-    <meta name="theme-color" content="#3b82f6">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚛️</text></svg>">
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTmV1dHJvbiAtIE11bHRpLUFJIFdvcmtzcGFjZSIsInNob3J0X25hbWUiOiJOZXV0cm9uIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxMTEiLCJ0aGVtZV9jb2xvciI6IiMzYjgyZjYiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTAwIDEwMCc+PHRleHQgeT0nLjllbScgZm9udC1zaXplPSc5MCc+4pqb77iPPC90ZXh0Pjwvc3ZnPiIsInNpemVzIjoiYW55IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
-    
+    <title>Neutron - AI Workspace</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    animation: {
-                        'fade-in': 'fadeIn 0.3s ease-in-out',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    }
-                }
-            }
-        }
-    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(0); }
-        }
-        
-        .service-icon {
-            transition: all 0.3s ease;
-        }
-        
-        .service-icon:hover {
-            transform: scale(1.05);
-        }
-        
-        .active-service {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
-        }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        #serviceFrame {
-            border: none;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .sidebar {
-            transition: transform 0.3s ease;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                position: fixed;
-                z-index: 50;
-            }
-            
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
-        
-        .install-button {
-            display: none;
-        }
-        
-        .install-button.show {
-            display: block;
-        }
+        * { font-family: 'Inter', sans-serif; }
+        .service-frame { display: none; }
+        .service-frame.active { display: block; }
     </style>
 </head>
-<body class="bg-gray-900 text-white overflow-hidden">
-    <!-- Install Banner -->
-    <div id="installBanner" class="install-button fixed top-0 left-0 right-0 bg-blue-600 text-white p-3 text-center z-50">
-        <span class="text-sm">Install Neutron for the best experience!</span>
-        <button id="installBtn" class="ml-3 bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium">Install</button>
-        <button id="dismissBanner" class="ml-2 text-white/80 hover:text-white">✕</button>
-    </div>
-
-    <!-- Mobile Menu Button -->
-    <button id="mobileMenuBtn" class="fixed top-4 left-4 z-40 p-3 bg-blue-600 rounded-lg md:hidden shadow-lg">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-    </button>
-
-    <div class="flex h-screen">
+<body class="bg-gray-900 text-white h-screen overflow-hidden">
+    <div class="flex h-full">
         <!-- Sidebar -->
-        <div id="sidebar" class="sidebar w-80 bg-gray-800 border-r border-gray-700 flex flex-col h-full">
-            <!-- Header -->
-            <div class="p-6 border-b border-gray-700">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                            <span class="text-xl">⚛️</span>
-                        </div>
-                        <div>
-                            <h1 class="text-xl font-bold">Neutron</h1>
-                            <p class="text-sm text-gray-400">Multi-AI Workspace</p>
-                        </div>
-                    </div>
-                    <button id="closeSidebar" class="p-2 hover:bg-gray-700 rounded-lg md:hidden">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
+        <div class="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
+            <div class="p-4 border-b border-gray-700">
+                <h1 class="text-xl font-bold">Neutron</h1>
+                <p class="text-sm text-gray-400">Multi-AI Workspace</p>
             </div>
             
-            <!-- AI Services -->
-            <div class="flex-1 p-4 overflow-y-auto">
-                <div class="space-y-2">
-                    <div class="service-item active-service rounded-xl p-4 cursor-pointer" data-service="chatgpt" data-url="https://chatgpt.com">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center service-icon">
-                                <span class="text-sm font-bold">🤖</span>
-                            </div>
-                            <div>
-                                <h3 class="font-medium">ChatGPT</h3>
-                                <p class="text-xs text-gray-300">OpenAI</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="claude" data-url="https://claude.ai">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center service-icon">
-                                <span class="text-sm font-bold">🧠</span>
-                            </div>
-                            <div>
-                                <h3 class="font-medium">Claude</h3>
-                                <p class="text-xs text-gray-300">Anthropic</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="gemini" data-url="https://gemini.google.com">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center service-icon">
-                                <span class="text-sm font-bold">💎</span>
-                            </div>
-                            <div>
-                                <h3 class="font-medium">Gemini</h3>
-                                <p class="text-xs text-gray-300">Google</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="perplexity" data-url="https://www.perplexity.ai">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center service-icon">
-                                <span class="text-sm font-bold">🔍</span>
-                            </div>
-                            <div>
-                                <h3 class="font-medium">Perplexity</h3>
-                                <p class="text-xs text-gray-300">Perplexity AI</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="groq" data-url="https://groq.com">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center service-icon">
-                                <span class="text-sm font-bold">⚡</span>
-                            </div>
-                            <div>
-                                <h3 class="font-medium">Groq</h3>
-                                <p class="text-xs text-gray-300">Groq Inc</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- ChatBetter as Easter Egg -->
-                    <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="chatbetter" data-url="https://chatbetter.com">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center service-icon">
-                                <span class="text-sm font-bold">🎭</span>
-                            </div>
-                            <div>
-                                <h3 class="font-medium">ChatBetter</h3>
-                                <p class="text-xs text-gray-300">Free in Neutron!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Community & Tools -->
-                <div class="mt-8">
-                    <h4 class="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wide">Community & Tools</h4>
-                    <div class="space-y-2">
-                        <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="reddit" data-url="https://reddit.com">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center service-icon">
-                                    <span class="text-sm font-bold">📱</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-medium">Reddit</h3>
-                                    <p class="text-xs text-gray-300">Community</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="discord" data-url="https://discord.com/app">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center service-icon">
-                                    <span class="text-sm font-bold">💬</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-medium">Discord</h3>
-                                    <p class="text-xs text-gray-300">Chat</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="openrouter" data-url="https://openrouter.ai">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center service-icon">
-                                    <span class="text-sm font-bold">🚀</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-medium">OpenRouter</h3>
-                                    <p class="text-xs text-gray-300">API Hub</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Developer Tools -->
-                <div class="mt-8">
-                    <h4 class="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wide">Developer Tools</h4>
-                    <div class="space-y-2">
-                        <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="replit" data-url="https://replit.com">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center service-icon">
-                                    <span class="text-sm font-bold">💻</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-medium">Replit</h3>
-                                    <p class="text-xs text-gray-300">Code Online</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="github" data-url="https://github.com">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center service-icon">
-                                    <span class="text-sm font-bold">🐙</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-medium">GitHub</h3>
-                                    <p class="text-xs text-gray-300">Code Repos</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="service-item glass rounded-xl p-4 cursor-pointer hover:bg-white/10" data-service="vscode" data-url="https://vscode.dev">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center service-icon">
-                                    <span class="text-sm font-bold">⚙️</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-medium">VS Code</h3>
-                                    <p class="text-xs text-gray-300">Web Editor</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex-1 overflow-y-auto p-4">
+                <div id="services" class="space-y-2"></div>
             </div>
             
-            <!-- Footer -->
             <div class="p-4 border-t border-gray-700">
-                <div class="flex items-center justify-between text-sm text-gray-400">
-                    <span>Neutron v1.0</span>
-                    <button id="settingsBtn" class="hover:text-white transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </button>
-                </div>
+                <button onclick="openAllServices()" class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm">
+                    Open All in Tabs
+                </button>
             </div>
         </div>
         
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
-            <!-- Top Bar -->
-            <div class="h-16 bg-gray-800 border-b border-gray-700 flex items-center justify-between px-6">
-                <div class="flex items-center space-x-4">
-                    <h2 id="currentService" class="text-lg font-semibold">ChatGPT</h2>
-                    <div class="flex items-center space-x-2">
-                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse-slow"></div>
-                        <span class="text-sm text-green-400">Connected</span>
-                    </div>
-                </div>
-                
-                <div class="flex items-center space-x-3">
-                    <button id="refreshBtn" class="p-2 hover:bg-gray-700 rounded-lg transition-colors" title="Refresh">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                        </svg>
-                    </button>
-                    <button id="newWindowBtn" class="p-2 hover:bg-gray-700 rounded-lg transition-colors" title="New Window">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+        <div class="flex-1 relative">
+            <div id="frames-container" class="w-full h-full"></div>
             
-            <!-- Content Area -->
-            <div class="flex-1 relative">
-                <iframe id="serviceFrame" src="https://chatgpt.com" allow="microphone; camera; clipboard-read; clipboard-write; accelerometer; gyroscope"></iframe>
-                
-                <!-- Loading Overlay -->
-                <div id="loadingOverlay" class="absolute inset-0 bg-gray-900 flex items-center justify-center" style="display: none;">
-                    <div class="text-center">
-                        <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                        <p class="text-gray-400">Loading service...</p>
-                    </div>
+            <!-- Blocked Message -->
+            <div id="blocked-msg" class="absolute inset-0 flex items-center justify-center bg-gray-900" style="display:none;">
+                <div class="text-center">
+                    <h2 class="text-2xl mb-4">Service Requires New Tab</h2>
+                    <p class="text-gray-400 mb-6">This service blocks embedding for security.</p>
+                    <button onclick="openInNewTab()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded">
+                        Open in New Tab
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // PWA Install functionality
-        let deferredPrompt;
-        const installBanner = document.getElementById('installBanner');
-        const installBtn = document.getElementById('installBtn');
-        const dismissBanner = document.getElementById('dismissBanner');
+        const services = [
+            { id: 'chatgpt', name: 'ChatGPT', url: 'https://chatgpt.com', icon: '🤖', canEmbed: true },
+            { id: 'claude', name: 'Claude', url: 'https://claude.ai', icon: '🧠', canEmbed: false },
+            { id: 'gemini', name: 'Gemini', url: 'https://gemini.google.com', icon: '💎', canEmbed: false },
+            { id: 'perplexity', name: 'Perplexity', url: 'https://www.perplexity.ai', icon: '🔍', canEmbed: true },
+            { id: 'groq', name: 'Groq', url: 'https://console.groq.com', icon: '⚡', canEmbed: false },
+            { id: 'github', name: 'GitHub', url: 'https://github.com', icon: '🐙', canEmbed: true },
+            { id: 'replit', name: 'Replit', url: 'https://replit.com', icon: '💻', canEmbed: true }
+        ];
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBanner.classList.add('show');
-        });
+        let activeService = null;
+        let currentUrl = null;
 
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to the install prompt: ${outcome}`);
-                deferredPrompt = null;
-                installBanner.classList.remove('show');
-            }
-        });
-
-        dismissBanner.addEventListener('click', () => {
-            installBanner.classList.remove('show');
-        });
-
-        // Mobile menu functionality
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const sidebar = document.getElementById('sidebar');
-        const closeSidebar = document.getElementById('closeSidebar');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            sidebar.classList.add('open');
-        });
-        
-        closeSidebar.addEventListener('click', () => {
-            sidebar.classList.remove('open');
-        });
-        
-        // Service switching functionality
-        const serviceItems = document.querySelectorAll('.service-item');
-        const serviceFrame = document.getElementById('serviceFrame');
-        const currentServiceName = document.getElementById('currentService');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        
-        serviceItems.forEach(item => {
-            item.addEventListener('click', function() {
-                // Remove active state from all items
-                serviceItems.forEach(i => {
-                    i.classList.remove('active-service');
-                    i.classList.add('glass', 'hover:bg-white/10');
-                });
+        function initServices() {
+            const container = document.getElementById('services');
+            const framesContainer = document.getElementById('frames-container');
+            
+            services.forEach(service => {
+                // Create sidebar button
+                const btn = document.createElement('button');
+                btn.className = 'w-full p-3 rounded hover:bg-gray-700 text-left flex items-center space-x-3';
+                btn.innerHTML = `
+                    <span class="text-xl">${service.icon}</span>
+                    <div>
+                        <div class="font-medium">${service.name}</div>
+                        <div class="text-xs text-gray-400">${service.canEmbed ? 'Embedded' : 'Tab only'}</div>
+                    </div>
+                `;
+                btn.onclick = () => loadService(service);
+                container.appendChild(btn);
                 
-                // Add active state to clicked item
-                this.classList.remove('glass', 'hover:bg-white/10');
-                this.classList.add('active-service');
-                
-                // Update service
-                const serviceName = this.querySelector('h3').textContent;
-                const serviceUrl = this.dataset.url;
-                
-                currentServiceName.textContent = serviceName;
-                
-                // Show loading
-                loadingOverlay.style.display = 'flex';
-                
-                // Load new service
-                serviceFrame.src = serviceUrl;
-                
-                // Hide loading after frame loads
-                serviceFrame.onload = () => {
-                    setTimeout(() => {
-                        loadingOverlay.style.display = 'none';
-                    }, 1000);
-                };
-                
-                // Close mobile sidebar
-                sidebar.classList.remove('open');
+                // Create iframe
+                const frame = document.createElement('iframe');
+                frame.id = `frame-${service.id}`;
+                frame.className = 'service-frame w-full h-full border-0';
+                frame.allow = 'microphone; camera; clipboard-read; clipboard-write';
+                framesContainer.appendChild(frame);
             });
-        });
-        
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', (e) => {
-            try {
-                if (window.innerWidth <= 768 && 
-                    sidebar.classList.contains('open') && 
-                    !sidebar.contains(e.target) && 
-                    !mobileMenuBtn.contains(e.target)) {
-                    sidebar.classList.remove('open');
+            
+            // Load first service
+            loadService(services[0]);
+        }
+
+        function loadService(service) {
+            // Hide all frames
+            document.querySelectorAll('.service-frame').forEach(f => f.classList.remove('active'));
+            document.getElementById('blocked-msg').style.display = 'none';
+            
+            activeService = service;
+            currentUrl = service.url;
+            
+            if (service.canEmbed) {
+                const frame = document.getElementById(`frame-${service.id}`);
+                if (!frame.src) {
+                    frame.src = service.url;
                 }
-            } catch (error) {
-                console.log('Click handler error:', error);
+                frame.classList.add('active');
+            } else {
+                document.getElementById('blocked-msg').style.display = 'flex';
+            }
+            
+            // Update active state
+            document.querySelectorAll('#services button').forEach((btn, i) => {
+                btn.classList.toggle('bg-blue-600', services[i].id === service.id);
+            });
+        }
+
+        function openInNewTab() {
+            if (currentUrl) window.open(currentUrl, '_blank');
+        }
+
+        function openAllServices() {
+            services.forEach(service => {
+                window.open(service.url, '_blank');
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '1' && e.key <= '7') {
+                const index = parseInt(e.key) - 1;
+                if (services[index]) loadService(services[index]);
             }
         });
-        
-        // Refresh functionality
-        const refreshBtn = document.getElementById('refreshBtn');
-        if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => {
-                loadingOverlay.style.display = 'flex';
-                serviceFrame.src = serviceFrame.src;
-            });
-        }
-        
-        // New window functionality  
-        const newWindowBtn = document.getElementById('newWindowBtn');
-        if (newWindowBtn) {
-            newWindowBtn.addEventListener('click', () => {
-                window.open(serviceFrame.src, '_blank');
-            });
-        }
 
-        // Settings functionality
-        const settingsBtn = document.getElementById('settingsBtn');
-        if (settingsBtn) {
-            settingsBtn.addEventListener('click', () => {
-                alert('Settings coming soon! This is just the MVP 🚀');
-            });
-        }
-
-        // Performance optimization
-        serviceFrame.addEventListener('load', () => {
-            console.log('Service loaded successfully');
-        });
-
-        serviceFrame.addEventListener('error', () => {
-            console.log('Service failed to load');
-            loadingOverlay.innerHTML = `
-                <div class="text-center">
-                    <div class="text-red-500 text-6xl mb-4">⚠️</div>
-                    <p class="text-gray-400">Failed to load service</p>
-                    <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded" onclick="location.reload()">Retry</button>
-                </div>
-            `;
-        });
+        initServices();
     </script>
 </body>
 </html>
-```
