@@ -3,171 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neutron - Multi-AI Workspace</title>
+    <title>Neutron</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
         * { font-family: 'Inter', sans-serif; }
-        .service-frame { display: none; }
-        .service-frame.active { display: block; }
     </style>
 </head>
 <body class="bg-gray-900 text-white h-screen overflow-hidden">
     <div class="flex h-full">
         <!-- Sidebar -->
-        <div class="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
-            <div class="p-4 border-b border-gray-700">
-                <h1 class="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">Neutron</h1>
-                <p class="text-sm text-gray-400">Zero API Costs</p>
+        <div class="w-72 bg-gray-800 border-r border-gray-700 flex flex-col">
+            <div class="p-6 border-b border-gray-700">
+                <h1 class="text-2xl font-bold text-blue-400">Neutron</h1>
+                <p class="text-sm text-gray-400 mt-1">Multi-AI Workspace</p>
             </div>
-            
+
             <div class="flex-1 overflow-y-auto p-4">
-                <div class="text-xs text-gray-500 uppercase mb-3">AI Models</div>
-                <div id="ai-services" class="space-y-2 mb-6"></div>
-                
-                <div class="text-xs text-gray-500 uppercase mb-3">Development</div>
-                <div id="dev-services" class="space-y-2 mb-6"></div>
-                
-                <div class="text-xs text-gray-500 uppercase mb-3">Communication</div>
-                <div id="comm-services" class="space-y-2"></div>
+                <div class="space-y-1 mb-8">
+                    <div class="text-xs text-gray-500 uppercase tracking-wide mb-3">AI Models</div>
+                    
+                    <button onclick="openService('ChatGPT', 'https://chatgpt.com')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">🤖</span>
+                        <span class="font-medium">ChatGPT</span>
+                    </button>
+                    
+                    <button onclick="openService('Claude', 'https://claude.ai')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">🧠</span>
+                        <span class="font-medium">Claude</span>
+                    </button>
+                    
+                    <button onclick="openService('Gemini', 'https://gemini.google.com')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">💎</span>
+                        <span class="font-medium">Gemini</span>
+                    </button>
+                    
+                    <button onclick="openService('Perplexity', 'https://www.perplexity.ai')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">🔍</span>
+                        <span class="font-medium">Perplexity</span>
+                    </button>
+                    
+                    <button onclick="openService('Groq', 'https://groq.com')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">⚡</span>
+                        <span class="font-medium">Groq</span>
+                    </button>
+                    
+                    <button onclick="openService('You.com', 'https://you.com')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">🎯</span>
+                        <span class="font-medium">You.com</span>
+                    </button>
+                </div>
+
+                <div class="space-y-1 mb-8">
+                    <div class="text-xs text-gray-500 uppercase tracking-wide mb-3">Development</div>
+                    
+                    <button onclick="openService('GitHub', 'https://github.com')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">🐙</span>
+                        <span class="font-medium">GitHub</span>
+                    </button>
+                    
+                    <button onclick="openService('Replit', 'https://replit.com')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">💻</span>
+                        <span class="font-medium">Replit</span>
+                    </button>
+                    
+                    <button onclick="openService('VS Code', 'https://vscode.dev')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">📝</span>
+                        <span class="font-medium">VS Code</span>
+                    </button>
+                </div>
+
+                <div class="space-y-1">
+                    <div class="text-xs text-gray-500 uppercase tracking-wide mb-3">Communication</div>
+                    
+                    <button onclick="openService('Gmail', 'https://mail.google.com')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">📧</span>
+                        <span class="font-medium">Gmail</span>
+                    </button>
+                    
+                    <button onclick="openService('Discord', 'https://discord.com/app')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">💬</span>
+                        <span class="font-medium">Discord</span>
+                    </button>
+                    
+                    <button onclick="openService('YouTube', 'https://youtube.com')" 
+                            class="service-btn w-full p-3 rounded-lg hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors">
+                        <span class="text-xl">📺</span>
+                        <span class="font-medium">YouTube</span>
+                    </button>
+                </div>
             </div>
         </div>
         
         <!-- Main Content -->
-        <div class="flex-1 relative bg-black">
-            <div id="frames-container" class="w-full h-full"></div>
-            
-            <!-- Tab Mode Notice -->
-            <div id="tab-notice" class="absolute inset-0 flex items-center justify-center bg-gray-900" style="display:none;">
+        <div class="flex-1 relative bg-gray-900">
+            <div id="welcome-screen" class="h-full flex items-center justify-center">
                 <div class="text-center max-w-md">
-                    <h2 class="text-2xl mb-4">Opening in New Tab</h2>
-                    <p class="text-gray-400 mb-6">This service requires a separate tab for security.</p>
-                    <button onclick="openCurrentService()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded">
-                        Open Now
-                    </button>
+                    <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">⚛️</span>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-4">Welcome to Neutron</h2>
+                    <p class="text-gray-400 mb-8">Select a service from the sidebar to get started. Each service opens in a new tab for security and performance.</p>
+                    <div class="text-sm text-gray-500">
+                        <p>💡 Tip: Use keyboard shortcuts 1-6 for quick AI access</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Tab Manager -->
+    <div id="tab-manager" class="fixed bottom-4 right-4 bg-gray-800 rounded-lg shadow-xl p-4 border border-gray-700 max-w-sm" style="display:none;">
+        <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-semibold">Active Tabs</h3>
+            <button onclick="closeTabManager()" class="text-gray-400 hover:text-white">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="tab-list" class="space-y-2 max-h-60 overflow-y-auto">
+            <!-- Tab items will be added here -->
+        </div>
+        <div class="mt-3 pt-3 border-t border-gray-700">
+            <button onclick="closeAllTabs()" class="text-sm text-red-400 hover:text-red-300">
+                Close All Tabs
+            </button>
+        </div>
+    </div>
+
     <script>
-        const services = {
-            ai: [
-                { id: 'chatgpt', name: 'ChatGPT', url: 'https://chatgpt.com', icon: '🤖', embed: false },
-                { id: 'gemini', name: 'Gemini', url: 'https://gemini.google.com', icon: '💎', embed: false },
-                { id: 'claude', name: 'Claude', url: 'https://claude.ai', icon: '🧠', embed: false },
-                { id: 'perplexity', name: 'Perplexity', url: 'https://www.perplexity.ai', icon: '🔍', embed: false },
-                { id: 'pi', name: 'Pi', url: 'https://pi.ai', icon: '🥧', embed: false }
-            ],
-            dev: [
-                { id: 'replit', name: 'Replit', url: 'https://replit.com', icon: '💻', embed: true },
-                { id: 'github', name: 'GitHub', url: 'https://github.com', icon: '🐙', embed: false },
-                { id: 'vscode', name: 'VS Code', url: 'https://vscode.dev', icon: '📝', embed: false }
-            ],
-            comm: [
-                { id: 'gmail', name: 'Gmail', url: 'https://mail.google.com', icon: '📧', embed: false },
-                { id: 'discord', name: 'Discord', url: 'https://discord.com/app', icon: '💬', embed: false }
-            ]
-        };
-
+        let openTabs = new Map();
         let activeService = null;
-        let currentUrl = null;
 
-        function initServices() {
-            // Create AI services
-            const aiContainer = document.getElementById('ai-services');
-            services.ai.forEach(service => createServiceButton(service, aiContainer));
-            
-            // Create Dev services
-            const devContainer = document.getElementById('dev-services');
-            services.dev.forEach(service => createServiceButton(service, devContainer));
-            
-            // Create Comm services
-            const commContainer = document.getElementById('comm-services');
-            services.comm.forEach(service => createServiceButton(service, commContainer));
-            
-            // Create frames
-            const framesContainer = document.getElementById('frames-container');
-            [...services.ai, ...services.dev, ...services.comm].forEach(service => {
-                if (service.embed) {
-                    const frame = document.createElement('iframe');
-                    frame.id = `frame-${service.id}`;
-                    frame.className = 'service-frame w-full h-full border-0';
-                    frame.allow = 'microphone; camera; clipboard-read; clipboard-write';
-                    framesContainer.appendChild(frame);
-                }
-            });
-            
-            // Load first service
-            loadService(services.ai[0]);
-        }
-
-        function createServiceButton(service, container) {
-            const btn = document.createElement('button');
-            btn.id = `btn-${service.id}`;
-            btn.className = 'w-full p-3 rounded hover:bg-gray-700 text-left flex items-center space-x-3 transition-colors';
-            btn.innerHTML = `
-                <span class="text-xl">${service.icon}</span>
-                <span class="font-medium">${service.name}</span>
-            `;
-            btn.onclick = () => loadService(service);
-            container.appendChild(btn);
-        }
-
-        function loadService(service) {
-            activeService = service;
-            currentUrl = service.url;
-            
-            // Update button states
-            document.querySelectorAll('button[id^="btn-"]').forEach(btn => {
+        function openService(name, url) {
+            // Update active button
+            document.querySelectorAll('.service-btn').forEach(btn => {
                 btn.classList.remove('bg-blue-600');
             });
-            document.getElementById(`btn-${service.id}`).classList.add('bg-blue-600');
+            event.target.closest('.service-btn').classList.add('bg-blue-600');
             
-            // Hide all frames and notices
-            document.querySelectorAll('.service-frame').forEach(f => f.classList.remove('active'));
-            document.getElementById('tab-notice').style.display = 'none';
+            activeService = name;
             
-            if (service.embed) {
-                const frame = document.getElementById(`frame-${service.id}`);
-                if (!frame.src) {
-                    frame.src = service.url;
+            // Hide welcome screen
+            document.getElementById('welcome-screen').style.display = 'none';
+            
+            // Check if tab already exists
+            if (openTabs.has(name)) {
+                const existingTab = openTabs.get(name);
+                if (!existingTab.closed) {
+                    existingTab.focus();
+                    return;
                 }
-                frame.classList.add('active');
-            } else {
-                document.getElementById('tab-notice').style.display = 'flex';
+            }
+            
+            // Open new tab
+            const newTab = window.open(url, `neutron-${name.toLowerCase().replace(/\W/g, '')}`, 
+                'scrollbars=yes,resizable=yes,status=no,location=no,toolbar=no,menubar=no');
+            
+            if (newTab) {
+                openTabs.set(name, newTab);
+                updateTabManager();
+                showTabManager();
             }
         }
 
-        function openCurrentService() {
-            if (currentUrl) window.open(currentUrl, '_blank');
+        function updateTabManager() {
+            const tabList = document.getElementById('tab-list');
+            tabList.innerHTML = '';
+            
+            openTabs.forEach((tab, name) => {
+                if (tab.closed) {
+                    openTabs.delete(name);
+                    return;
+                }
+                
+                const tabItem = document.createElement('div');
+                tabItem.className = 'flex items-center justify-between p-2 rounded bg-gray-700 hover:bg-gray-600 transition-colors';
+                tabItem.innerHTML = `
+                    <span class="text-sm font-medium">${name}</span>
+                    <div class="flex space-x-2">
+                        <button onclick="focusTab('${name}')" class="text-blue-400 hover:text-blue-300">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </button>
+                        <button onclick="closeTab('${name}')" class="text-red-400 hover:text-red-300">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                tabList.appendChild(tabItem);
+            });
+            
+            // Hide tab manager if no tabs
+            if (openTabs.size === 0) {
+                document.getElementById('tab-manager').style.display = 'none';
+            }
+        }
+
+        function showTabManager() {
+            if (openTabs.size > 0) {
+                document.getElementById('tab-manager').style.display = 'block';
+            }
+        }
+
+        function closeTabManager() {
+            document.getElementById('tab-manager').style.display = 'none';
+        }
+
+        function focusTab(name) {
+            const tab = openTabs.get(name);
+            if (tab && !tab.closed) {
+                tab.focus();
+            }
+        }
+
+        function closeTab(name) {
+            const tab = openTabs.get(name);
+            if (tab && !tab.closed) {
+                tab.close();
+            }
+            openTabs.delete(name);
+            updateTabManager();
+        }
+
+        function closeAllTabs() {
+            openTabs.forEach((tab, name) => {
+                if (!tab.closed) {
+                    tab.close();
+                }
+            });
+            openTabs.clear();
+            updateTabManager();
         }
 
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            if (e.key >= '1' && e.key <= '5' && !e.ctrlKey && !e.metaKey) {
+            if (e.key >= '1' && e.key <= '6' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                const services = ['ChatGPT', 'Claude', 'Gemini', 'Perplexity', 'Groq', 'You.com'];
+                const urls = [
+                    'https://chatgpt.com',
+                    'https://claude.ai',
+                    'https://gemini.google.com',
+                    'https://www.perplexity.ai',
+                    'https://groq.com',
+                    'https://you.com'
+                ];
+                
                 const index = parseInt(e.key) - 1;
-                if (services.ai[index]) loadService(services.ai[index]);
+                if (services[index]) {
+                    e.preventDefault();
+                    openService(services[index], urls[index]);
+                }
+            }
+            
+            // Tab manager toggle with 'T'
+            if (e.key.toLowerCase() === 't' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                const tabManager = document.getElementById('tab-manager');
+                if (tabManager.style.display === 'none' || !tabManager.style.display) {
+                    if (openTabs.size > 0) {
+                        showTabManager();
+                    }
+                } else {
+                    closeTabManager();
+                }
             }
         });
 
-        // Save last used service
-        window.addEventListener('beforeunload', () => {
-            if (activeService) {
-                localStorage.setItem('lastService', activeService.id);
-            }
-        });
+        // Check for closed tabs periodically
+        setInterval(() => {
+            updateTabManager();
+        }, 5000);
 
-        // Initialize
-        initServices();
-        
-        // Restore last service
-        const lastServiceId = localStorage.getItem('lastService');
-        if (lastServiceId) {
-            const allServices = [...services.ai, ...services.dev, ...services.comm];
-            const lastService = allServices.find(s => s.id === lastServiceId);
-            if (lastService) loadService(lastService);
-        }
+        console.log('🚀 Neutron loaded successfully');
+        console.log('💡 Press 1-6 for quick AI access, T for tab manager');
     </script>
 </body>
 </html>
